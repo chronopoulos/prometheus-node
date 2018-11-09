@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-
+#include "evalkit_constants.h"
 
 enum calculationType {
 	DIST, AMP, INFO
