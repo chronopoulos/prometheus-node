@@ -20,7 +20,6 @@ int calcDefNoPiDelayGetDist(uint16_t **data) {
 	int offset = calibrationGetOffsetPhase();
 	int size = pruGetImage(data);
 	uint16_t *pMem = *data;
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	int minAmplitude = pruGetMinAmplitude();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	int nPixelPerDCS = size / 2;
@@ -42,7 +41,7 @@ int calcDefNoPiDelayGetDist(uint16_t **data) {
 			amplitude = sqrt((arg1 * arg1) + (arg2 * arg2));
 			if (hysteresisUpdate(i, amplitude)) {
 				distance = fp_atan2(arg1, arg2);
-				distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[i] + 0.5;
+				distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 				pixelData[i] = (int16_t) ((distance + MODULO_SHIFT) % MAX_DIST_VALUE);
 			} else {
 				pixelData[i] = LOW_AMPLITUDE;
@@ -65,7 +64,7 @@ int calcDefNoPiDelayGetDist(uint16_t **data) {
 			arg2 = 2048 - arg2;
 
 			distance = fp_atan2(arg1, arg2);
-			distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[i] + 0.5;
+			distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 			pixelData[i] = (int16_t) ((distance + MODULO_SHIFT) % MAX_DIST_VALUE);
 		}
 	}
@@ -102,7 +101,6 @@ int calcDefNoPiDelayGetInfo(uint16_t **data) {
 	int offset = calibrationGetOffsetPhase();
 	int size = pruGetImage(data);
 	uint16_t *pMem = *data;
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	int nPixelPerDCS = size / 2;
 	for (i = 0; i < nPixelPerDCS; i++) {
@@ -122,7 +120,7 @@ int calcDefNoPiDelayGetInfo(uint16_t **data) {
 		amplitude = sqrt((arg1 * arg1) + (arg2 * arg2));
 		if (hysteresisUpdate(i, amplitude)) {
 			distance = fp_atan2(arg1, arg2);
-			distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[i] + 0.5;
+			distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 			pixelData[i] = (int16_t) ((distance + MODULO_SHIFT) % MAX_DIST_VALUE);
 		} else {
 			pixelData[i] = LOW_AMPLITUDE;

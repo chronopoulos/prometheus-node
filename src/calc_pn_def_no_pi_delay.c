@@ -8,6 +8,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "evalkit_constants.h" // ckc
+
 static uint16_t pixelData[328 * 252 * 2];
 int32_t arg1;
 int32_t arg2;
@@ -21,7 +23,6 @@ int calcPNDefNoPiDelayGetDist(uint16_t **data) {
 	int offset = calibrationGetOffsetPhase();
 	int size = pruGetImage(data);
 	uint16_t *pMem = *data;
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	int minAmplitude = pruGetMinAmplitude();
 	int nPixelPerDCS = size / 2;
@@ -39,7 +40,7 @@ int calcPNDefNoPiDelayGetDist(uint16_t **data) {
 
 			amplitude = abs(arg2) + abs(arg1); // amplitude divider = 1
 			if (hysteresisUpdate(i, amplitude)) {
-				pixelData[i] = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + calibrationMap[i] + 0.5;
+				pixelData[i] = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + 0.5;
 			} else {
 				pixelData[i] = LOW_AMPLITUDE;
 			}
@@ -56,7 +57,7 @@ int calcPNDefNoPiDelayGetDist(uint16_t **data) {
 			}
 			arg2 = 2048 - arg2;
 			arg1 = 2048 - arg1;
-			pixelData[i] = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + calibrationMap[i] + 0.5;
+			pixelData[i] = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + 0.5;
 		}
 	}
 	*data = pixelData;
@@ -90,7 +91,6 @@ int calcPNDefNoPiDelayGetInfo(uint16_t **data) {
 	int offset = calibrationGetOffsetPhase();
 	int size = pruGetImage(data);
 	uint16_t *pMem = *data;
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	int nPixelPerDCS = size / 2;
 	for (i = 0; i < nPixelPerDCS; i++) {
@@ -106,7 +106,7 @@ int calcPNDefNoPiDelayGetInfo(uint16_t **data) {
 
 		amplitude =  abs(arg2) + abs(arg1); // amplitude divider = 1
 		if (hysteresisUpdate(i, amplitude)) {
-			pixelData[i] = (double) abs(arg1) / (abs(arg2) + abs(arg2)) * MAX_DIST_VALUE + offset + calibrationMap[i] + 0.5;
+			pixelData[i] = (double) abs(arg1) / (abs(arg2) + abs(arg2)) * MAX_DIST_VALUE + offset + 0.5;
 		} else {
 			pixelData[i] = LOW_AMPLITUDE;
 		}

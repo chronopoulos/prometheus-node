@@ -25,7 +25,6 @@ int calcPNMGXNoPiDelayGetDist(uint16_t **data) {
 	int nCols = pruGetNCols();
 	int nRowsPerHalf = pruGetNRowsPerHalf();
 	uint16_t nHalves = pruGetNumberOfHalves();
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	int minAmplitude = pruGetMinAmplitude();
 
@@ -43,7 +42,7 @@ int calcPNMGXNoPiDelayGetDist(uint16_t **data) {
 				arg1 = 2048 - arg1;
 				amplitude = abs(arg2) + abs(arg1); // amplitude divider = 1
 				if (hysteresisUpdate(i, amplitude)) {
-					distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + calibrationMap[r * nCols + nCols + c] + 0.5;
+					distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + 0.5;
 				} else {
 					distance = LOW_AMPLITUDE;
 				}
@@ -56,7 +55,7 @@ int calcPNMGXNoPiDelayGetDist(uint16_t **data) {
 					arg1 = 2048 - (pMem[r * nCols * nHalves + 3 * nCols + c] & pixelMask);
 					amplitude = abs(arg2) + abs(arg1); // amplitude divider = 1
 					if (hysteresisUpdate(i, amplitude)) {
-						distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + calibrationMap[r * nCols + nCols + c] + 0.5;
+						distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + 0.5;
 					} else {
 						distance = LOW_AMPLITUDE;
 					}
@@ -78,14 +77,14 @@ int calcPNMGXNoPiDelayGetDist(uint16_t **data) {
 				}
 				arg2 = 2048 - arg2;
 				arg1 = 2048 - arg1;
-				distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + calibrationMap[r * nCols + c] + 0.5;
+				distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + 0.5;
 				pixelData[(r*nHalves/2) * nCols + c] = distance;
 
 				if (!(configGetPartType() == EPC635 || configGetPartType() == EPC503)) {
 					//bottom pixelfield row (arg1 and arg2 are swapped due to swapped DCS0 and DCS1)
 					arg2 = 2048 - (pMem[ r * nCols * nHalves + 2 * nCols + c] & pixelMask);
 					arg1 = 2048 - (pMem[ r * nCols * nHalves + 3 * nCols + c] & pixelMask);
-					distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + calibrationMap[r * nCols + nCols + c] + 0.5;
+					distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + 0.5;
 					pixelData[r * nCols + nCols + c] = distance;
 				}
 			}
@@ -138,7 +137,6 @@ int calcPNMGXNoPiDelayGetInfo(uint16_t **data) {
 	int nCols = pruGetNCols();
 	int nRowsPerHalf = pruGetNRowsPerHalf();
 	uint16_t nHalves = pruGetNumberOfHalves();
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 
 	for (r = 0; r < nRowsPerHalf - 1; r += 2) {
@@ -155,7 +153,7 @@ int calcPNMGXNoPiDelayGetInfo(uint16_t **data) {
 
 			amplitude = abs(arg2) + abs(arg1); // amplitude divider = 1
 			if (hysteresisUpdate(i, amplitude)){
-				distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + calibrationMap[r * nCols + c] + 0.5;
+				distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + 0.5;
 			}
 			else{
 				distance = LOW_AMPLITUDE;
@@ -169,7 +167,7 @@ int calcPNMGXNoPiDelayGetInfo(uint16_t **data) {
 				arg1 = 2048 - (pMem[r * nCols * nHalves + 3 * nCols + c] & pixelMask);
 				amplitude = abs(arg2) + abs(arg1); // amplitude divider = 1
 				if (hysteresisUpdate(i, amplitude)){
-					distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + calibrationMap[r * nCols + nCols + c] + 0.5;
+					distance = (double) abs(arg1) / (abs(arg2) + abs(arg1)) * MAX_DIST_VALUE + offset + 0.5;
 				}
 				else{
 					distance = LOW_AMPLITUDE;

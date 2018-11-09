@@ -7,6 +7,8 @@
 #include "calculator.h"
 #include <math.h>
 
+#include "evalkit_constants.h" // ckc
+
 static uint16_t pixelData[328 * 252 * 2];
 int32_t arg1;
 int32_t arg2;
@@ -24,7 +26,6 @@ int calcMGXPiDelayGetDist(uint16_t **data) {
 	uint16_t *pMem = *data;
 	int nCols = pruGetNCols();
 	int nRowsPerHalf = pruGetNRowsPerHalf();
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	uint16_t nHalves = pruGetNumberOfHalves();
 	int minAmplitude = pruGetMinAmplitude();
@@ -46,7 +47,7 @@ int calcMGXPiDelayGetDist(uint16_t **data) {
 				amplitude = sqrt((arg1 * arg1) + (arg2 * arg2));
 				if (hysteresisUpdate(r * nCols + c, amplitude)) {
 					distance = fp_atan2(arg1, arg2);
-					distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[r * nCols + c] + 0.5;
+					distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 					distance = (distance + MODULO_SHIFT) % MAX_DIST_VALUE;
 					pixelData[(r*nHalves/2) * nCols + c] = (int16_t) distance;
 				} else {
@@ -65,7 +66,7 @@ int calcMGXPiDelayGetDist(uint16_t **data) {
 					amplitude = sqrt((arg1 * arg1) + (arg2 * arg2));
 					if (hysteresisUpdate(r * nCols + nCols + c, amplitude)) {
 						distance = fp_atan2(arg1, arg2);
-						distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[r * nCols + nCols + c] + 0.5;
+						distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 						distance = (distance + MODULO_SHIFT) % MAX_DIST_VALUE;
 					} else {
 						distance = LOW_AMPLITUDE;
@@ -92,7 +93,7 @@ int calcMGXPiDelayGetDist(uint16_t **data) {
 				}
 
 				distance = fp_atan2(arg1, arg2);
-				distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[r * nCols + c] + 0.5;
+				distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 				distance = (distance + MODULO_SHIFT) % MAX_DIST_VALUE;
 				pixelData[(r*nHalves/2) * nCols + c] = (int16_t) distance;
 
@@ -105,7 +106,7 @@ int calcMGXPiDelayGetDist(uint16_t **data) {
 					arg1 = (pixelDCS3 & pixelMask) - (pixelDCS1 & pixelMask);
 					arg2 = (pixelDCS2 & pixelMask) - (pixelDCS0 & pixelMask);
 					distance = fp_atan2(arg1, arg2);
-					distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[r * nCols + nCols + c] + 0.5;
+					distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 					distance = (distance + MODULO_SHIFT) % MAX_DIST_VALUE;
 					pixelData[r * nCols + nCols + c] = (int16_t) distance;
 				}
@@ -160,7 +161,6 @@ int calcMGXPiDelayGetInfo(uint16_t **data) {
 	int nCols = pruGetNCols();
 	int nRowsPerHalf = pruGetNRowsPerHalf();
 	uint16_t nHalves = pruGetNumberOfHalves();
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	for (r = 0; r < nRowsPerHalf - 1; r += 2) {
 		for (c = 0; c < nCols; c++) {
@@ -180,7 +180,7 @@ int calcMGXPiDelayGetInfo(uint16_t **data) {
 			amplitude = sqrt((arg1 * arg1 / 4) + (arg2 * arg2 / 4));
 			if (hysteresisUpdate(r * nCols + c, amplitude)) {
 				distance = fp_atan2(arg1, arg2);
-				distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[r * nCols + c] + 0.5;
+				distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 				distance = (distance + MODULO_SHIFT) % MAX_DIST_VALUE;
 				pixelData[(r*nHalves/2) * nCols + c] = (int16_t) distance;
 			} else {
@@ -199,7 +199,7 @@ int calcMGXPiDelayGetInfo(uint16_t **data) {
 				amplitude = sqrt((arg1 * arg1 / 4) + (arg2 * arg2 / 4));
 				if (hysteresisUpdate(r * nCols + nCols + c, amplitude)) {
 					distance = fp_atan2(arg1, arg2);
-					distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + calibrationMap[r * nCols + nCols + c] + 0.5;
+					distance = ((distance * MAX_DIST_VALUE) / FP_M_2_PI) + offset + 0.5;
 				} else {
 					amplitude = LOW_AMPLITUDE;
 				}

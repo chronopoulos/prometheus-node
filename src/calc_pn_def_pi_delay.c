@@ -8,6 +8,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "evalkit_constants.h" // ckc
+
 static uint16_t pixelData[328 * 252 * 2];
 int32_t arg1;
 int32_t arg2;
@@ -23,7 +25,6 @@ int calcPNDefPiDelayGetDist(uint16_t **data) {
 	int offset = calibrationGetOffsetPhase();
 	int size = pruGetImage(data);
 	uint16_t *pMem = *data;
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	int minAmplitude = pruGetMinAmplitude();
 	int nPixelPerDCS = size / 4;
@@ -44,7 +45,7 @@ int calcPNDefPiDelayGetDist(uint16_t **data) {
 
 			amplitude = (abs(arg2) + abs(arg1)) / 2;
 			if (hysteresisUpdate(i, amplitude)) {
-				pixelData[i] = ((double) abs(arg1) / (abs(arg2) + abs(arg1))) * MAX_DIST_VALUE + offset + calibrationMap[i] + 0.5;
+				pixelData[i] = ((double) abs(arg1) / (abs(arg2) + abs(arg1))) * MAX_DIST_VALUE + offset + 0.5;
 			} else {
 				pixelData[i] = LOW_AMPLITUDE;
 			}
@@ -64,7 +65,7 @@ int calcPNDefPiDelayGetDist(uint16_t **data) {
 				arg2 = arg2 >> 4;
 			}
 
-			int32_t distance = ((double) abs(arg1) / (abs(arg2) + abs(arg1))) * MAX_DIST_VALUE + offset + calibrationMap[i] + 0.5;
+			int32_t distance = ((double) abs(arg1) / (abs(arg2) + abs(arg1))) * MAX_DIST_VALUE + offset + 0.5;
 			pixelData[i] = (uint16_t) distance;
 		}
 	}
@@ -101,7 +102,6 @@ int calcPNDefPiDelayGetInfo(uint16_t **data) {
 	int offset = calibrationGetOffsetPhase();
 	int size = pruGetImage(data);
 	uint16_t *pMem = *data;
-	int32_t *calibrationMap = calibrationGetCorrectionMap();
 	uint16_t pixelMask = calculatorGetPixelMask();
 	int nPixelPerDCS = size / 4;
 	for (i = 0; i < nPixelPerDCS; i++) {
@@ -120,7 +120,7 @@ int calcPNDefPiDelayGetInfo(uint16_t **data) {
 
 		amplitude = (abs(arg2) + abs(arg1)) / 2;
 		if (hysteresisUpdate(i, amplitude)) {
-			 int32_t distance = ((double) abs(arg1) / (abs(arg2) + abs(arg1))) * MAX_DIST_VALUE + offset + calibrationMap[i] + 0.5;
+			 int32_t distance = ((double) abs(arg1) / (abs(arg2) + abs(arg1))) * MAX_DIST_VALUE + offset + 0.5;
 			 pixelData[i] = (uint16_t)distance;
 		} else {
 			pixelData[i] = LOW_AMPLITUDE;
