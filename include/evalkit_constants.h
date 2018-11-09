@@ -32,7 +32,7 @@
 #define MAX_DIST_VALUE_8			MAX_DIST_VALUE / 8
 
 
-//#define FP_M_2_PI					3217.0 	//! 2 PI in fp_s22_9 format
+#define FP_M_2_PI					3217.0 	//! 2 PI in fp_s22_9 format
 //#define FP_M_PI					1608.5
 
 
