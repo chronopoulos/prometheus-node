@@ -7,10 +7,8 @@ BINDIR = bin
 INCDIR = include
 SRCDIR = src
 
-BIN = tof-imager
+BIN = promNode
 OUTPUT = $(BINDIR)/$(BIN)
-INSTALLPATH = /home/tof-imager
-ip ?= 192.168.7.2# DME660 IP over USB; May be set in build command.
 
 $(info INFO: Scanning for C sources...)
 CSOURCES += $(shell find -L $(SRCDIR) -name '*.c')
@@ -28,17 +26,16 @@ CFLAGS = -Wall -c -std=c99 -g -mtune=cortex-a8 -march=armv7-a $(OPTIMIZATION) $(
 LDFLAGS = # -Xlinker --verbose
 
 $(info INFO: Compiling...)
-all: $(OUTPUT)
+all: $(BINDIR) $(OUTPUT)
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
 
 $(OUTPUT): $(OBJECTS)
 	$(CC) $(LDFLAGS) -o $@ $(OBJECTS) $(LDLIBS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@
-
-install: all
-	install -d $(INSTALLPATH)
-	install -m 754 $(BINDIR)/* $(INSTALLPATH)
 
 deploy: all
 	$(info INFO: Deploying...)
@@ -47,4 +44,4 @@ deploy: all
 	$(DEPLOY3)
 
 clean:
-	$(RM) $(OBJECTS) $(OUTPUT)
+	$(RM) $(OBJECTS) $(BINDIR)
