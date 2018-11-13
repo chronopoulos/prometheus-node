@@ -29,7 +29,7 @@
 int i2c(unsigned int dev_addr, char op, unsigned int reg_addr, unsigned int n_bytes_data, unsigned char** p_data) {
 	int i, k;
 	int fd_i2c;
-	char *filename = "/dev/i2c-1";
+	char *filename = "/dev/i2c-2";
 
 	unsigned char buf_wr[n_bytes_data + 1];
 	unsigned char buf_rd[n_bytes_data + 1];
