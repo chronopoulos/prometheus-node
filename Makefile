@@ -7,7 +7,7 @@ BINDIR = bin
 INCDIR = include
 SRCDIR = src
 
-BIN = promNode
+BIN = prom-node
 OUTPUT = $(BINDIR)/$(BIN)
 
 $(info INFO: Scanning for C sources...)
