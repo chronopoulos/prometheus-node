@@ -172,9 +172,14 @@ void handleRequest(int sock) {
 	bzero(buffer, TCP_BUFFER_SIZE);
 	int size = read(sock, buffer, TCP_BUFFER_SIZE);
 	gSock = sock;
+
 	if (buffer[size - 1] == '\n'){
 		buffer[size - 1] = '\0';
-	}
+    } else if (buffer[size - 1] != '\0') {
+        printf("bad message received, aborting\n");
+        return;
+    }
+
 	char stringArray[MAX_COMMAND_ARGUMENTS][MAX_COMMAND_ARGUMENT_LENGTH];
 	int argumentCount = helperParseCommand(buffer, stringArray);
 	unsigned char response[TCP_BUFFER_SIZE];
