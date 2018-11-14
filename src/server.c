@@ -242,6 +242,14 @@ void handleRequest(int sock) {
 		answer = apiSetEnableImaging(helperStringToInteger(stringArray[1]));
 		send_lengthPrefixed(sock, &answer, sizeof(int16_t), MSG_NOSIGNAL);
 
+    /* CKCKCKCKCKCKC */
+
+	} else if (strcmp(stringArray[0], "primeForCapture") == 0 && !argumentCount) {
+
+        pruPrime();
+        answer = 0;
+        send_lengthPrefixed(sock, &answer, sizeof(int16_t), MSG_NOSIGNAL);
+
 	} else if (strcmp(stringArray[0], "getBWSorted") == 0 && !argumentCount) {
 
 		uint16_t *pMem = NULL;
@@ -263,26 +271,14 @@ void handleRequest(int sock) {
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
 
-    /* CKCKCKCKCKCKC */
-
-	} else if (strcmp(stringArray[0], "primeBWSorted") == 0 && !argumentCount) {
-
-        printf("\nprimeBWSorted!\n");
-        pruPrime();
-        answer = 0;
-        send_lengthPrefixed(sock, &answer, sizeof(int16_t), MSG_NOSIGNAL);
-
 	} else if (strcmp(stringArray[0], "collectBWSorted") == 0 && !argumentCount) {
-
-        printf("\ncollectBWSorted!\n");
 
 		uint16_t *pMem = NULL;
         int dataSize = 2 * apiGetBWSorted(&pMem, 1);
         send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 
-    /* CKCKCKCKCKCKC */
-
 	} else if (strcmp(stringArray[0], "getDCSSorted") == 0 && !argumentCount) {
+
 		uint16_t *pMem = NULL;
 		serverStopThreads(StartDCSVideo);
 
@@ -301,6 +297,13 @@ void handleRequest(int sock) {
 			int dataSize = 2 * apiGetDCSSorted(&pMem, 0);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
+
+	} else if (strcmp(stringArray[0], "collectDCSSorted") == 0 && !argumentCount) {
+
+		uint16_t *pMem = NULL;
+        int dataSize = 2 * apiGetDCSSorted(&pMem, 1);
+        send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
+
 	} else if (strcmp(stringArray[0], "getDCSTOFAndGrayscaleSorted") == 0 && !argumentCount) {
 		uint16_t *pMem = NULL;
 		serverStopThreads(StartDCSTOFandGrayVideo);
@@ -320,6 +323,7 @@ void handleRequest(int sock) {
 			int dataSize = 2 * apiGetDCSTOFeAndGrayscaleSorted(&pMem, 0);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
+
 	} else if (strcmp(stringArray[0], "getDistanceSorted") == 0 && !argumentCount) {
 		uint16_t *pMem = NULL;
 		serverStopThreads(StartDistVideo);
