@@ -241,7 +241,9 @@ void handleRequest(int sock) {
 	}	else if (strcmp(stringArray[0], "enableImaging") == 0 && argumentCount == 1) {
 		answer = apiSetEnableImaging(helperStringToInteger(stringArray[1]));
 		send_lengthPrefixed(sock, &answer, sizeof(int16_t), MSG_NOSIGNAL);
+
 	} else if (strcmp(stringArray[0], "getBWSorted") == 0 && !argumentCount) {
+
 		uint16_t *pMem = NULL;
 		serverStopThreads(StartGrayVideo);
 
@@ -260,6 +262,30 @@ void handleRequest(int sock) {
 			int dataSize = 2 * apiGetBWSorted(&pMem);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
+
+    /* CKCKCKCKCKCKC */
+
+	} else if (strcmp(stringArray[0], "primeBWSorted") == 0 && !argumentCount) {
+
+        // this just primes for capture, and sends back a 'ready' message
+        printf("\nprimeBWSorted!\n");
+        //apiPrimeBWSorted();
+        answer = 0;
+        send_lengthPrefixed(sock, &answer, sizeof(int16_t), MSG_NOSIGNAL);
+
+	} else if (strcmp(stringArray[0], "collectBWSorted") == 0 && !argumentCount) {
+
+        // this blocks until data is read out, then it writes it over the socket
+        //int dataSize = 2 * apiGetBWSorted(&pMem);
+        //send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
+        printf("\ncollectBWSorted!\n");
+        /*
+        answer = 0;
+        send_lengthPrefixed(sock, &answer, sizeof(int16_t), MSG_NOSIGNAL);
+        */
+
+    /* CKCKCKCKCKCKC */
+
 	} else if (strcmp(stringArray[0], "getDCSSorted") == 0 && !argumentCount) {
 		uint16_t *pMem = NULL;
 		serverStopThreads(StartDCSVideo);

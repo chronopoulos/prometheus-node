@@ -303,7 +303,34 @@ int pruGetImage(uint16_t **data) {
 	*data = pMem;
 	int size = nRowsPerHalf * nHalves * nCols * nDCS;
 
-	return size;		// size of all pixels
+	return size;		// number of pixels
+}
+
+void pruPrime(void) {
+
+    prussdrv_pruintc_init(&pruss_intc_initdata);
+
+	if(gStartFlag == 0){
+		gStartFlag = 1; //execute only one time
+		if (configGetPartType() == EPC635 || configGetPartType() == EPC503) {
+			prussdrv_exec_program(PRU_NUM, "./pru_capture_epc635.bin");
+		} else {
+			prussdrv_exec_program(PRU_NUM, "./pru_capture_epc660.bin");
+		}
+	} else {
+		prussdrv_pru_send_event (ARM_PRU0_INTERRUPT + 16);
+	}
+
+}
+
+int pruCollect(uint16_t **data) {
+
+	prussdrv_pru_wait_event (PRU_EVTOUT_0);
+
+	*data = pMem;
+	int size = nRowsPerHalf * nHalves * nCols * nDCS;
+
+	return size;		// number of pixels
 }
 
 /*!

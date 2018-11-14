@@ -22,6 +22,8 @@ int pruGetNCols();
 int pruGetNDCS();
 void pruSetMinAmplitude(const unsigned int minAmp);
 int pruGetImage(uint16_t **data);
+void pruPrime(void);
+int pruCollect(uint16_t**);
 int pruRelease();
 
 #endif
