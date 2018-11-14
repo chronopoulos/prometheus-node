@@ -120,8 +120,8 @@ Does grayscale image acquisition and returns sorted grayscale data array.
 @returns image size in pixels.
 @note If grayscale correction is enabled, applies grayscale correction.
  */
-int calculationBWSorted(uint16_t **data) {
-	int size = calcBWSorted(data);
+int calculationBWSorted(uint16_t **data, int primed) {
+	int size = calcBWSorted(data, primed);
 
 	if (configGetCurrentMode() == FLIM && availableFlimCorrection != 0){
 		calculationFlimCorrection(data, size);
@@ -138,11 +138,11 @@ Does TOF image acquisition and returns DCS sorted data array.
 @returns image size in pixels.
 @note If ambient light flag is enabled, applies ambient light correction.
  */
-int calculationDCSSorted(uint16_t **data) {
+int calculationDCSSorted(uint16_t **data, int primed) {
 	int size = 0;
 
 	if( configIsFLIM()== 1){
-		size = calculationBWSorted(data);  //if FLIM
+		size = calculationBWSorted(data, primed);  //if FLIM
 	} else {
 		/*if(enableAmbientLight != 0){	//TODO right ambientlight correction
 			int numPix = pruGetNCols() * pruGetNRowsPerHalf() * pruGetNumberOfHalves();
@@ -153,7 +153,7 @@ int calculationDCSSorted(uint16_t **data) {
 			}
 		}*/
 
-		size = calculationBWSorted(data);
+		size = calculationBWSorted(data, primed);
 
 		/*if(calculationGetEnableAmbientLight() != 0){ TODO right ambientlight correction
 			calculationAmbientDCSCorrection(data, size/pruGetNDCS());
@@ -170,7 +170,7 @@ Does TOF image acquisition and returns 4xDCS + Grayscale image sorted data array
 @note If ambient light flag is enabled, applies ambient light correction.
  */
 
-int getDCSTOFeAndGrayscaleSorted(uint16_t **data,int nDCSTOF_log) {
+int getDCSTOFeAndGrayscaleSorted(uint16_t **data,int nDCSTOF_log, int primed) {
 	int size = 0;
 	int sizeGray=0;
 	op_mode_t mode = GRAYSCALE;
@@ -189,7 +189,7 @@ int getDCSTOFeAndGrayscaleSorted(uint16_t **data,int nDCSTOF_log) {
 	i2cData[0] = 0xc8; //switch off illumination driver
 	i2c(deviceAddress, 'w', 0x90, 1, &i2cData);
 
-	sizeGray = calculationBWSorted(data);				//get Grayscale image
+	sizeGray = calculationBWSorted(data, primed);				//get Grayscale image
 	pMemGray = *data;
 
 	i2cData[0] = 0xcc; //switch off illumination driver
@@ -210,7 +210,7 @@ int getDCSTOFeAndGrayscaleSorted(uint16_t **data,int nDCSTOF_log) {
 	pruSetDCS(nDCSTOF_log);
 	configLoad(mode, configGetDeviceAddress());
 
-	size = calculationBWSorted(data);					//get 4 DCS image
+	size = calculationBWSorted(data, primed);					//get 4 DCS image
 
 	/*if(calculationGetEnableAmbientLight() != 0){		//TODO: right ambient light correction, do the ambient light correction with the grayscale image
 		calculationAmbientDCSCorrection(data, size/pruGetNDCS());
@@ -231,12 +231,12 @@ Does TOF image acquisition and returns sorted amplitude data array.
 @param data pointer to pointer data array.
 @returns image size in pixels.
  */
-int calculationAmplitudeSorted(uint16_t **data) {
+int calculationAmplitudeSorted(uint16_t **data, int primed) {
 
 	if (dualMGX) {
 		if (piDelay) {
 			if (pn) {
-				return calcPNMGXPiDelayGetDataSorted(AMP, data);
+				return calcPNMGXPiDelayGetDataSorted(AMP, data); // todo: add primed to these
 			} else {
 				return calcMGXPiDelayGetDataSorted(AMP, data);
 			}
@@ -270,7 +270,7 @@ Does TOF image acquisition and returns sorted distance data array.
 @returns image size in pixels.
 @note If filtering and correction is enabled, applies filtering and correction.
  */
-int calculationDistanceSorted(uint16_t **data) {
+int calculationDistanceSorted(uint16_t **data, int primed) {
 	int size;
 	int orgOffsetLSB = calibrationGetOffsetPhase();
 
@@ -286,7 +286,7 @@ int calculationDistanceSorted(uint16_t **data) {
 	if (dualMGX) {
 		if (piDelay) {
 			if (pn) {
-				size = calcPNMGXPiDelayGetDataSorted(DIST, data);
+				size = calcPNMGXPiDelayGetDataSorted(DIST, data); // TODO add primed
 			} else {
 				size = calcMGXPiDelayGetDataSorted(DIST, data);
 			}
@@ -425,7 +425,7 @@ Does TOF image acquisition and returns sorted distance and amplitude data array.
 @returns image size in pixels.
 @note If filtering and  correction is enabled, applies filtering and  correction
  */
-int calculationDistanceAndAmplitudeSorted(uint16_t **data) {
+int calculationDistanceAndAmplitudeSorted(uint16_t **data, int primed) {
 	int size;
 	int orgOffsetLSB = calibrationGetOffsetPhase();
 
@@ -783,7 +783,7 @@ void calculationGrayscaleMean(int numAveragingImages, int* data){
 
 	for(m=0; m < numAveragingImages; m++){		//take numMean frames for averaging
 
-		calcBWSorted(&pData); 			//take gray scale image
+		calcBWSorted(&pData, 0); 			//take gray scale image
 
 		for(l=0; l< numMaxPixels; l++)
 			tempImages[l] += pData[l];
@@ -2089,7 +2089,7 @@ int calculationFlimMean(int numAveragingImages, int* data, int side){
 
 	for(m=0; m < numAveragingImages; m++){	//take numMean frames for averaging
 
-		size = calcBWSorted(&pData); 				//take gray scale image
+		size = calcBWSorted(&pData, 0); 				//take gray scale image
 		beg = side * size /2;
 
 		for(k=beg, l=0; l<numMaxPixels; l++, k++)

@@ -972,20 +972,20 @@ int16_t apiFLIMGetStep(){
  see unsorted
  sorted -> 0/0 first 327/251 last
  */
-int apiGetBWSorted(uint16_t **data) {
-	return calculationBWSorted(data);
+int apiGetBWSorted(uint16_t **data, int primed) {
+	return calculationBWSorted(data, primed);
 }
 
 /*!
  see unsorted
  sorted -> 0/0 first 327/251 last
  */
-int apiGetDCSSorted(uint16_t **data) {
-	return calculationDCSSorted(data);
+int apiGetDCSSorted(uint16_t **data, int primed) {
+	return calculationDCSSorted(data, primed);
 }
 
-int apiGetDCSTOFeAndGrayscaleSorted(uint16_t **data) {
-	return getDCSTOFeAndGrayscaleSorted(data, nDCSTOF);	//logs with number of DCS set over mode (pi delay/no pi delay)
+int apiGetDCSTOFeAndGrayscaleSorted(uint16_t **data, int primed) {
+	return getDCSTOFeAndGrayscaleSorted(data, nDCSTOF, primed);	//logs with number of DCS set over mode (pi delay/no pi delay)
 }
 
 
@@ -993,7 +993,7 @@ int apiGetDCSTOFeAndGrayscaleSorted(uint16_t **data) {
  see unsorted
  sorted -> 0/0 first 327/251 last
  */
-int apiGetDistanceSorted(uint16_t **data) {
+int apiGetDistanceSorted(uint16_t **data, int primed) {
 
 	int16_t mode=0;
 
@@ -1008,22 +1008,22 @@ int apiGetDistanceSorted(uint16_t **data) {
 	}
 
 
-	return calculationDistanceSorted(data);
+	return calculationDistanceSorted(data, primed);
 }
 
 /*!
  see unsorted
  sorted -> 0/0 first 327/251 last
  */
-int apiGetAmplitudeSorted(uint16_t **data) {
-	return calculationAmplitudeSorted(data);
+int apiGetAmplitudeSorted(uint16_t **data, int primed) {
+	return calculationAmplitudeSorted(data, primed);
 }
 
 /*!
  see unsorted
  sorted -> 0/0 first 327/251 last
  */
-int apiGetDistanceAndAmplitudeSorted(uint16_t **data) {
+int apiGetDistanceAndAmplitudeSorted(uint16_t **data, int primed) {
 	/*double elapsedTime;
 	struct timeval tv1, tv2;
 	gettimeofday(&tv1, NULL);
@@ -1046,7 +1046,7 @@ int apiGetDistanceAndAmplitudeSorted(uint16_t **data) {
 		apiCorrectDRNU(0);
 	}
 
-	return calculationDistanceAndAmplitudeSorted(data);
+	return calculationDistanceAndAmplitudeSorted(data, primed);
 }
 
 int apiCalibrateGrayscale(int mode){

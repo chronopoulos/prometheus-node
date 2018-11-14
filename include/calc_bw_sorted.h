@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-int calcBWSorted(uint16_t **data);
+int calcBWSorted(uint16_t **data, int primed);
 void BWSortedAttachGrayscale(uint16_t* grayscaleAmp, int sizeGrayscaleAmp);
 
 

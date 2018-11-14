@@ -27,8 +27,13 @@ Does grayscale/DCS image acquisition and returns sorted data array
 @param data pointer to data pointer array. This arrays contains image data
 @returns image size (number of pixels)
  */
-int calcBWSorted(uint16_t **data) {
-	size = pruGetImage(data);
+int calcBWSorted(uint16_t **data, int primed) {
+
+    if (primed) {
+        size = pruCollect(data);
+    } else {
+        size = pruGetImage(data);
+    }
 
 	memcpy( (void*)pMem, (void*)(*data), size*sizeof(uint16_t));
 

@@ -128,7 +128,7 @@ int16_t calibrationSearchBadPixelsWithMin(){
 	i2cData[0] = mt_0_lo_bkp | 0x03;
 	i2c(deviceAddress, 'w', MT_0_LO, 1, &i2cData);
 
-	calcBWSorted(&pMem); // frame acquisition
+	calcBWSorted(&pMem, 0); // frame acquisition
 
 	char path[64];
 	sprintf(path, "./calibration/PT%02i_W%03i_C%03i_bad_pixels.txt", configGetPartType(), configGetWaferID(), configGetChipID());
@@ -465,7 +465,7 @@ void calibrationCreateDRNU_LUT(int indx, int numAveragedFrames){
 	for(j=0; j<numAveragedFrames; j++){
 		usleep(gDRNUCalibrateDelay);	//200 mS pause
 
-		calculationDistanceSorted(&pMem);
+		calculationDistanceSorted(&pMem, 0);
 
 		temperature += temperatureGetTemperature(configGetDeviceAddress());
 

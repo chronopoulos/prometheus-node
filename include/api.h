@@ -62,12 +62,12 @@ int16_t apiFLIMSetRepetitions(uint16_t value);
 int16_t apiFLIMSetFlashDelay(uint16_t value);
 int16_t apiFLIMSetFlashWidth(uint16_t value);
 
-int apiGetBWSorted(uint16_t **data);
-int apiGetDCSSorted(uint16_t **data);
-int apiGetDCSTOFeAndGrayscaleSorted(uint16_t **data);
-int apiGetDistanceSorted(uint16_t **data);
-int apiGetAmplitudeSorted(uint16_t **data);
-int apiGetDistanceAndAmplitudeSorted(uint16_t **data);
+int apiGetBWSorted(uint16_t **data, int primed);
+int apiGetDCSSorted(uint16_t **data, int primed);
+int apiGetDCSTOFeAndGrayscaleSorted(uint16_t **data, int primed);
+int apiGetDistanceSorted(uint16_t **data, int primed);
+int apiGetAmplitudeSorted(uint16_t **data, int primed);
+int apiGetDistanceAndAmplitudeSorted(uint16_t **data, int primed);
 
 int apiCorrectGrayscaleGain(int enable);
 int apiCorrectGrayscaleOffset(int enable);

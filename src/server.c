@@ -259,7 +259,7 @@ void handleRequest(int sock) {
 			send_lengthPrefixed(sock, pMem, dataSizeThread, MSG_NOSIGNAL);
 
 		}else{
-			int dataSize = 2 * apiGetBWSorted(&pMem);
+			int dataSize = 2 * apiGetBWSorted(&pMem, 0);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
 
@@ -267,22 +267,18 @@ void handleRequest(int sock) {
 
 	} else if (strcmp(stringArray[0], "primeBWSorted") == 0 && !argumentCount) {
 
-        // this just primes for capture, and sends back a 'ready' message
         printf("\nprimeBWSorted!\n");
-        //apiPrimeBWSorted();
+        pruPrime();
         answer = 0;
         send_lengthPrefixed(sock, &answer, sizeof(int16_t), MSG_NOSIGNAL);
 
 	} else if (strcmp(stringArray[0], "collectBWSorted") == 0 && !argumentCount) {
 
-        // this blocks until data is read out, then it writes it over the socket
-        //int dataSize = 2 * apiGetBWSorted(&pMem);
-        //send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
         printf("\ncollectBWSorted!\n");
-        /*
-        answer = 0;
-        send_lengthPrefixed(sock, &answer, sizeof(int16_t), MSG_NOSIGNAL);
-        */
+
+		uint16_t *pMem = NULL;
+        int dataSize = 2 * apiGetBWSorted(&pMem, 1);
+        send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 
     /* CKCKCKCKCKCKC */
 
@@ -302,7 +298,7 @@ void handleRequest(int sock) {
 			send_lengthPrefixed(sock, pMem, dataSizeThread, MSG_NOSIGNAL);
 
 		}else{
-			int dataSize = 2 * apiGetDCSSorted(&pMem);
+			int dataSize = 2 * apiGetDCSSorted(&pMem, 0);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
 	} else if (strcmp(stringArray[0], "getDCSTOFAndGrayscaleSorted") == 0 && !argumentCount) {
@@ -321,7 +317,7 @@ void handleRequest(int sock) {
 			send_lengthPrefixed(sock, pMem, dataSizeThread, MSG_NOSIGNAL);
 
 		}else{
-			int dataSize = 2 * apiGetDCSTOFeAndGrayscaleSorted(&pMem);
+			int dataSize = 2 * apiGetDCSTOFeAndGrayscaleSorted(&pMem, 0);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
 	} else if (strcmp(stringArray[0], "getDistanceSorted") == 0 && !argumentCount) {
@@ -340,7 +336,7 @@ void handleRequest(int sock) {
 			send_lengthPrefixed(sock, pMem, dataSizeThread, MSG_NOSIGNAL);
 
 		}else{
-			int dataSize = 2 * apiGetDistanceSorted(&pMem);
+			int dataSize = 2 * apiGetDistanceSorted(&pMem, 0);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
 
@@ -360,7 +356,7 @@ void handleRequest(int sock) {
 			send_lengthPrefixed(sock, pMem, dataSizeThread, MSG_NOSIGNAL);
 
 		}else{
-			int dataSize = 2 * apiGetAmplitudeSorted(&pMem);
+			int dataSize = 2 * apiGetAmplitudeSorted(&pMem, 0);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
 
@@ -380,7 +376,7 @@ void handleRequest(int sock) {
 			send_lengthPrefixed(sock, pMem, dataSizeThread, MSG_NOSIGNAL);
 
 		}else{
-			int dataSize = 2 * apiGetDistanceAndAmplitudeSorted(&pMem);
+			int dataSize = 2 * apiGetDistanceAndAmplitudeSorted(&pMem, 0);
 			send_lengthPrefixed(sock, pMem, dataSize, MSG_NOSIGNAL);
 		}
 

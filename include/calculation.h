@@ -13,12 +13,12 @@ enum calculationType {
 
 int16_t setEnableImaging(const int status);
 
-int calculationBWSorted(uint16_t **data);
-int calculationDCSSorted(uint16_t **data);
-int getDCSTOFeAndGrayscaleSorted(uint16_t **data, int nDCSTOF_log);
-int calculationDistanceSorted(uint16_t **data);
-int calculationAmplitudeSorted(uint16_t **data);
-int calculationDistanceAndAmplitudeSorted(uint16_t **data);
+int calculationBWSorted(uint16_t **data, int primed);
+int calculationDCSSorted(uint16_t **data, int primed);
+int getDCSTOFeAndGrayscaleSorted(uint16_t **data, int nDCSTOF_log, int primed);
+int calculationDistanceSorted(uint16_t **data, int primed);
+int calculationAmplitudeSorted(uint16_t **data, int primed);
+int calculationDistanceAndAmplitudeSorted(uint16_t **data, int primed);
 void calculationEnablePiDelay(const int state);
 void calculationEnableDualMGX(const int state);
 void calculationEnableHDR(const int state);
