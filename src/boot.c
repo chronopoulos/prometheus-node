@@ -76,7 +76,7 @@ void bootInit() {
 	gpio_set_val(fd_m5v_enable_val, 0);
 	gpio_set_dir(fd_3v3_enable_dir, "out");
 	gpio_set_val(fd_3v3_enable_val, 0);
-	gpio_set_dir(fd_bbb_epc660_shutter_dir, "out");
+	gpio_set_dir(fd_bbb_epc660_shutter_dir, "in");
 	gpio_set_val(fd_bbb_epc660_shutter_val, 0);
 }
 
